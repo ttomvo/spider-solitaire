@@ -12,7 +12,7 @@ const suitIcons = {
     diamonds: '♦️'
 };
 
-const Card = ({ id, suit, rank, faceUp, isDraggable, isHidden, isHintedSource, isHintedTarget, style: propStyle, ...props }) => {
+const Card = ({ id, suit, rank, faceUp, isDraggable, isHidden, isHintedSource, isHintedTarget, disableLayoutAnimations, style: propStyle, ...props }) => {
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
         id: id,
         data: { suit, rank, faceUp },
@@ -51,10 +51,6 @@ const Card = ({ id, suit, rank, faceUp, isDraggable, isHidden, isHintedSource, i
         transform: `translate3d(${xOffset}px, 0, 0) rotate(${rotation}deg)`,
     };
 
-    if (isHidden) {
-        return <div className="opacity-0 pointer-events-none" style={{ ...propStyle, width: 'var(--card-width)', height: 'var(--card-height)' }}></div>;
-    }
-
     const Wrapper = motion.div;
 
     // Common Visual Classes for the card look
@@ -67,45 +63,42 @@ const Card = ({ id, suit, rank, faceUp, isDraggable, isHidden, isHintedSource, i
         isHintedTarget && "ring-4 ring-green-400 ring-offset-2 scale-105 z-40"
     );
 
-    if (!faceUp) {
-        return (
-            <Wrapper
-                layoutId={id}
-                ref={setNodeRef}
-                className="relative" // Outer container size handled by style
-                style={{ ...outerStyle, width: 'var(--card-width)', height: 'var(--card-height)' }}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.2 }}
-            >
+    // Merge styles: handle visibility via opacity instead of unmounting
+    // Opacity is controlled via style to be instant (unless animated elsewhere)
+    // We remove opacity from motion 'animate' to prevent unwanted fade-in on drag end
+    const mergedStyle = {
+        ...outerStyle,
+        width: 'var(--card-width)',
+        height: 'var(--card-height)',
+        opacity: isHidden ? 0 : 1
+    };
+
+    return (
+        <Wrapper
+            layoutId={disableLayoutAnimations ? undefined : id}
+            ref={setNodeRef}
+            style={mergedStyle}
+            {...(faceUp ? { ...listeners, ...attributes } : {})}
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.2 }}
+            className="relative"
+        >
+            {faceUp ? (
+                <div className={faceUpClasses} style={innerStyle} onClick={props.onClick}>
+                    <div className="text-sm font-bold leading-none">{rank} {suitIcons[suit]}</div>
+                    <div className="absolute inset-0 flex items-center justify-center text-4xl opacity-20 pointer-events-none">
+                        {suitIcons[suit]}
+                    </div>
+                    <div className="text-sm font-bold leading-none self-end rotate-180">{rank} {suitIcons[suit]}</div>
+                </div>
+            ) : (
                 <div className={faceDownClasses} style={innerStyle} onClick={props.onClick}>
                     <div className="w-8 h-8 rounded-full border-2 border-yellow-500/30 flex items-center justify-center">
                         <span className="text-yellow-500/50 text-xs font-serif">GM</span>
                     </div>
                 </div>
-            </Wrapper>
-        );
-    }
-
-    return (
-        <Wrapper
-            layoutId={id}
-            ref={setNodeRef}
-            style={{ ...outerStyle, width: 'var(--card-width)', height: 'var(--card-height)' }}
-            {...listeners}
-            {...attributes}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.2 }}
-            className="relative" // Outer container size handled by style
-        >
-            <div className={faceUpClasses} style={innerStyle} onClick={props.onClick}>
-                <div className="text-sm font-bold leading-none">{rank} {suitIcons[suit]}</div>
-                <div className="absolute inset-0 flex items-center justify-center text-4xl opacity-20 pointer-events-none">
-                    {suitIcons[suit]}
-                </div>
-                <div className="text-sm font-bold leading-none self-end rotate-180">{rank} {suitIcons[suit]}</div>
-            </div>
+            )}
         </Wrapper>
     );
 };
