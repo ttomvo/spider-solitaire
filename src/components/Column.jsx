@@ -10,12 +10,12 @@ const Column = ({ id, cards, onCardClick, isHintedTarget }) => {
     });
 
     return (
-        <div ref={setNodeRef} className="flex flex-col items-center min-h-[150px] w-24 relative">
+        <div ref={setNodeRef} className="flex flex-col items-center min-h-[150px] relative" style={{ width: 'var(--card-width)' }}>
             {/* Placeholder for empty column */}
             <div className={clsx(
-                "absolute top-0 w-24 h-36 border-2 rounded-md transition-all duration-300",
+                "absolute top-0 border-2 rounded-md transition-all duration-300",
                 isHintedTarget ? "border-yellow-400 bg-yellow-400/20 shadow-[0_0_15px_rgba(250,204,21,0.5)] scale-105" : "border-white/10"
-            )}></div>
+            )} style={{ width: 'var(--card-width)', height: 'var(--card-height)' }}></div>
 
             {cards.map((card, index) => {
                 // Logic to determine if draggable:
@@ -35,7 +35,7 @@ const Column = ({ id, cards, onCardClick, isHintedTarget }) => {
                         isHintedTarget={card.isHintedTarget}
                         onClick={() => onCardClick(card.id)}
                         style={{
-                            marginTop: index === 0 ? 0 : -110, // Overlap cards
+                            marginTop: index === 0 ? 0 : 'var(--card-overlap)', // Dynamic overlap
                         }}
                     />
                 );

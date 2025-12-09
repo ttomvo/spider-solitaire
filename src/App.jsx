@@ -508,8 +508,8 @@ function App() {
   if (!gameState) return <div className="text-white">Loading...</div>;
 
   return (
-    <div className="min-h-screen p-8 bg-game-green text-white select-none overflow-hidden touch-none">
-      <div className="max-w-7xl mx-auto h-full flex flex-col">
+    <div className="min-h-screen p-2 md:p-4 lg:p-8 bg-game-green text-white select-none overflow-hidden touch-none">
+      <div className="w-full max-w-[1800px] mx-auto h-full flex flex-col px-2 md:px-4">
         {hasWon && (
           <WinModal onPlayAgain={() => setGameState(initializeGame())} soundEnabled={soundEnabled} />
         )}
@@ -553,7 +553,7 @@ function App() {
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
-          <div className="grid grid-cols-10 gap-1 flex-grow mt-4">
+          <div className="grid grid-cols-10 gap-2 lg:gap-4 flex-grow mt-4">
             {gameState.tableau.map((col, colIndex) => (
               <Column
                 key={`col-${colIndex}`}
@@ -576,13 +576,13 @@ function App() {
 
           <DragOverlay dropAnimation={dropAnimation}>
             {draggedStack.length > 0 ? (
-              <div className="flex flex-col relative w-24"> {/* explicit width to match column */}
+              <div className="flex flex-col relative" style={{ width: 'var(--card-width)' }}>
                 {draggedStack.map((card, index) => (
                   <Card
                     key={card.id}
                     {...card}
                     isDraggable={true}
-                    style={{ marginTop: index === 0 ? 0 : -110 }}
+                    style={{ marginTop: index === 0 ? 0 : 'var(--card-overlap)' }}
                   />
                 ))}
               </div>

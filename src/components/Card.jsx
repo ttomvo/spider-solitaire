@@ -52,7 +52,7 @@ const Card = ({ id, suit, rank, faceUp, isDraggable, isHidden, isHintedSource, i
     };
 
     if (isHidden) {
-        return <div className="w-24 h-36 opacity-0 pointer-events-none" style={propStyle}></div>;
+        return <div className="opacity-0 pointer-events-none" style={{ ...propStyle, width: 'var(--card-width)', height: 'var(--card-height)' }}></div>;
     }
 
     const Wrapper = motion.div;
@@ -72,8 +72,8 @@ const Card = ({ id, suit, rank, faceUp, isDraggable, isHidden, isHintedSource, i
             <Wrapper
                 layoutId={id}
                 ref={setNodeRef}
-                className="w-24 h-36 relative" // Outer container size
-                style={outerStyle}
+                className="relative" // Outer container size handled by style
+                style={{ ...outerStyle, width: 'var(--card-width)', height: 'var(--card-height)' }}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.2 }}
@@ -91,13 +91,13 @@ const Card = ({ id, suit, rank, faceUp, isDraggable, isHidden, isHintedSource, i
         <Wrapper
             layoutId={id}
             ref={setNodeRef}
-            style={outerStyle}
+            style={{ ...outerStyle, width: 'var(--card-width)', height: 'var(--card-height)' }}
             {...listeners}
             {...attributes}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.2 }}
-            className="w-24 h-36 relative" // Outer container size
+            className="relative" // Outer container size handled by style
         >
             <div className={faceUpClasses} style={innerStyle} onClick={props.onClick}>
                 <div className="text-sm font-bold leading-none">{rank} {suitIcons[suit]}</div>

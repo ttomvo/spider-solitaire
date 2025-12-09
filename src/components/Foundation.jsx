@@ -9,7 +9,8 @@ const Foundation = ({ completedRuns }) => {
                 return (
                     <div
                         key={index}
-                        className="w-24 h-36 border-2 border-white/20 rounded-md bg-black/10 flex items-center justify-center relative"
+                        className="border-2 border-white/20 rounded-md bg-black/10 flex items-center justify-center relative"
+                        style={{ width: 'var(--card-width)', height: 'var(--card-height)' }}
                     >
                         {!run && <span className="text-white/10 text-3xl">♠️</span>}
 
