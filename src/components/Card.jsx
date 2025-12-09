@@ -12,7 +12,7 @@ const suitIcons = {
     diamonds: '♦️'
 };
 
-const Card = ({ id, suit, rank, faceUp, isDraggable, isHidden, isHintedSource, isHintedTarget, disableLayoutAnimations, style: propStyle, ...props }) => {
+const Card = ({ id, suit, rank, faceUp, isDraggable, isHidden, isHintedSource, isHintedTarget, style: propStyle, ...props }) => {
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
         id: id,
         data: { suit, rank, faceUp },
@@ -75,7 +75,6 @@ const Card = ({ id, suit, rank, faceUp, isDraggable, isHidden, isHintedSource, i
 
     return (
         <Wrapper
-            layoutId={disableLayoutAnimations ? undefined : id}
             ref={setNodeRef}
             style={mergedStyle}
             {...(faceUp ? { ...listeners, ...attributes } : {})}

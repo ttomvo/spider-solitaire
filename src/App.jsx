@@ -582,7 +582,6 @@ function App() {
                     key={card.id}
                     {...card}
                     isDraggable={true}
-                    disableLayoutAnimations={true}
                     style={{ marginTop: index === 0 ? 0 : 'var(--card-overlap)' }}
                   />
                 ))}
